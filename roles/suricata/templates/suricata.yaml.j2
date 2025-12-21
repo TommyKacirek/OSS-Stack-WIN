@@ -1,0 +1,35 @@
+%YAML 1.1
+---
+vars:
+  address-groups:
+    HOME_NET: "[192.168.0.0/16,10.0.0.0/8,172.16.0.0/12]"
+    EXTERNAL_NET: "!$HOME_NET"
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert
+        - http
+        - dns
+        - tls
+        - flow
+        - ssh
+
+af-packet:
+  - interface: {{ ansible_default_ipv4.interface }}
+    cluster-id: 99
+    cluster-type: cluster_flow
+    defrag: yes
+
+default-rule-path: /var/lib/suricata/rules
+rule-files:
+  - suricata.rules
+
+logging:
+  level: info
+  outputs:
+    - console:
+        enabled: yes

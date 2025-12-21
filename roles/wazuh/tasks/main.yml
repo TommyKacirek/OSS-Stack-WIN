@@ -1,0 +1,25 @@
+- name: Ensure Wazuh config directories exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: 1000
+    group: 1000
+    mode: '0755'
+  with_items:
+    - /opt/lab/wazuh/config
+    - /opt/lab/wazuh/logs
+
+- name: Template ossec.conf
+  template:
+    src: ossec.conf.j2
+    dest: /opt/lab/wazuh/config/ossec.conf
+    owner: 1000
+    group: 1000
+    mode: '0644'
+
+- name: Deploy Wazuh via Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: {{ ansible_user_dir }}/wazuh-docker/
+    files:
+      - docker-compose.yml
+    state: present

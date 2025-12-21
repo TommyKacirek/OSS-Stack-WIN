@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./index.html:/usr/share/caddy/index.html
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - wazuh-docker_default
+      - greenbone-docker_default
+
+networks:
+  wazuh-docker_default:
+    external: true
+  greenbone-docker_default:
+    external: true
+
+volumes:
+  caddy_data:
+  caddy_config:

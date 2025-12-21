@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  vulnerability-tests:
+    image: registry.community.greenbone.net/community/vulnerability-tests
+    volumes:
+      - vt_data_vol:/mnt
+
+  notus-data:
+    image: registry.community.greenbone.net/community/notus-data
+    volumes:
+      - notus_data_vol:/mnt
+
+  scap-data:
+    image: registry.community.greenbone.net/community/scap-data
+    volumes:
+      - scap_data_vol:/mnt
+
+  cert-bund-data:
+    image: registry.community.greenbone.net/community/cert-bund-data
+    volumes:
+      - cert_data_vol:/mnt
+
+  data-objects:
+    image: registry.community.greenbone.net/community/data-objects
+    volumes:
+      - data_objects_vol:/mnt
+
+  redis-server:
+    image: registry.community.greenbone.net/community/redis-server
+    volumes:
+      - redis_socket_vol:/run/redis/
+
+  pg-gvm:
+    image: registry.community.greenbone.net/community/pg-gvm:stable
+    volumes:
+      - psql_data_vol:/var/lib/postgresql
+      - psql_socket_vol:/var/run/postgresql
+
+  gvmd:
+    image: registry.community.greenbone.net/community/gvmd:stable
+    volumes:
+      - gvmd_data_vol:/var/lib/gvm
+      - scap_data_vol:/var/lib/gvm/scap-data/
+      - cert_data_vol:/var/lib/gvm/cert-data
+      - data_objects_vol:/var/lib/gvm/data-objects/gvmd
+      - vt_data_vol:/var/lib/openvas/plugins
+      - psql_data_vol:/var/lib/postgresql
+      - gvmd_socket_vol:/run/gvmd
+      - ospd_openvas_socket_vol:/run/ospd
+      - psql_socket_vol:/var/run/postgresql
+    depends_on:
+      - pg-gvm
+
+  gsa:
+    image: registry.community.greenbone.net/community/gsa:stable
+    ports:
+      - "9392:80"
+    volumes:
+      - gvmd_socket_vol:/run/gvmd
+    depends_on:
+      - gvmd
+
+  ospd-openvas:
+    image: registry.community.greenbone.net/community/openvas-scanner:stable
+    volumes:
+      - vt_data_vol:/var/lib/openvas/plugins
+      - gvmd_socket_vol:/run/gvmd
+      - ospd_openvas_socket_vol:/run/ospd
+      - redis_socket_vol:/run/redis/
+
+volumes:
+  gvmd_data_vol:
+  psql_data_vol:
+  vt_data_vol:
+  notus_data_vol:
+  scap_data_vol:
+  cert_data_vol:
+  data_objects_vol:
+  gvmd_socket_vol:
+  ospd_openvas_socket_vol:
+  psql_socket_vol:
+  redis_socket_vol:

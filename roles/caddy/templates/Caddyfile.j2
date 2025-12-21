@@ -1,0 +1,22 @@
+{
+    admin off
+}
+
+http://100.114.205.29:80 {
+    root * /usr/share/caddy
+    file_server
+    
+    # Redirects
+    redir /wazuh* https://{host}:5601
+    redir /greenbone* http://{host}:9392
+}
+
+https://:443 {
+    tls /etc/caddy/cert.pem /etc/caddy/key.pem
+    root * /usr/share/caddy
+    file_server
+
+    # Redirects
+    redir /wazuh* https://{host}:5601
+    redir /greenbone* http://{host}:9392
+}

@@ -1,0 +1,9 @@
+---
+- name: Deploy Cybersecurity Lab Stack
+  hosts: localhost
+  become: yes
+  roles:
+    - wazuh
+    - greenbone
+    - suricata
+    - caddy
