@@ -64,14 +64,8 @@ services:
 
   ospd-openvas:
     image: registry.community.greenbone.net/community/openvas-scanner:stable
-    environment:
-      FEED_PATH: /var/lib/openvas/plugins/25.0/vt-data/nasl
-      GNUPGHOME: /etc/openvas/gnupg
-      NOTUS_ADVISORIES: /var/lib/notus/advisories
-      NOTUS_PRODUCTS: /var/lib/notus/products
     volumes:
       - vt_data_vol:/var/lib/openvas/plugins
-      - notus_data_vol:/var/lib/notus
       - gvmd_socket_vol:/run/gvmd
       - ospd_openvas_socket_vol:/run/ospd
       - redis_socket_vol:/run/redis/

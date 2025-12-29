@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  suricata:
+    image: jasonish/suricata:latest
+    container_name: suricata
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_NICE
+    volumes:
+      - suricata_logs:/var/log/suricata
+      - /opt/lab/suricata/config/suricata.yaml:/etc/suricata/suricata.yaml
+    command: -i {{ ansible_default_ipv4.interface }} -c /etc/suricata/suricata.yaml
+
+volumes:
+  suricata_logs:
+    external: true

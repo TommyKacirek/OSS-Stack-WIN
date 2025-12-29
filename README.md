@@ -70,12 +70,11 @@ Check the **Wazuh Dashboard** -> **Security Events** to see these alerts appeari
 ## ⚠️ Known Issues / Troubleshooting
 
 ### Greenbone Scanner (OSPD) Initialization
-**Status**: Degraded.
-The Greenbone scanner containers run, but the `ospd-openvas` service may fail to initialize the scanner socket due to a path mismatch with the NVT feed (Error: `sha256sums not found`).
+**Status**: ✅ Resolved.
+The Greenbone scanner is fully operational after a clean feed sync and configuration alignment.
 
-*   **Context**: The `openvasd` binary expects the vulnerability feed in a specific path that typically requires the exact versioned structure (`25.0/vt-data/nasl`) mixed with a flat structure.
-*   **Workaround**: Most of the stack is fully operational. If you need the scanner, refer to `greenbone-docker_vt_data_vol` volume adjustments detailed in `context.md`.
-*   **Reference**: See `context.md` in the root of this repo for a detailed debugging log and list of attempted fixes.
+*   **Context**: We performed a "Tabula Rasa" reset of the feed volumes and manually injected the correct feed version (25.0) to resolve checksum errors.
+*   **Reference**: See `context.md` for details on the fix implementation.
 
 ---
 **Author**: Tommy Kacirek

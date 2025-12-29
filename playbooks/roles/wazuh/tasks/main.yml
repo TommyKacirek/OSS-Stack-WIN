@@ -19,7 +19,7 @@
 
 - name: Deploy Wazuh via Docker Compose
   community.docker.docker_compose_v2:
-    project_src: "{{ ansible_user_dir }}/wazuh-docker/"
+    project_src: "/home/kaca/wazuh-docker/"
     files:
       - docker-compose.yml
     state: present
